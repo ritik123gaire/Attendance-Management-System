@@ -23,6 +23,7 @@ def teacher_directory_path(instance, filename):
     filename = name + '.' + ext
     return 'teacher_images/{}/{}/{}'.format(instance.user.branch, instance.user.year, filename)
 
+
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
     teacher_id = models.CharField(primary_key=True, max_length=10)
@@ -37,10 +38,12 @@ class Teacher(models.Model):
         return str(self.firstname + " " + self.lastname)
 
 def student_directory_path(instance, filename):
-    name, ext = filename.split(".")
+    # Split the filename by the last period to handle filenames with multiple periods
+    name, ext = filename.rsplit('.', 1)
     name = instance.roll_no
-    filename = name + '.' + ext
+    filename = f"{name}.{ext}"
     return 'student_images/{}/{}/{}/{}'.format(instance.branch, instance.year, instance.section, filename)
+
 
 class Student(models.Model):
     BRANCH = (
